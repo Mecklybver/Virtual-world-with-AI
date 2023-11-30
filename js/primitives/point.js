@@ -17,15 +17,31 @@ class Point {
       if (outline) {
          ctx.beginPath();
          ctx.lineWidth = 2;
-         ctx.strokeStyle = "yellow";
+         ctx.strokeStyle = "red";
+         ctx.fillStyle = "red";
+         ctx.arc(this.x, this.y, rad * 0.3, 0, Math.PI * 2);
+         ctx.fill();
          ctx.arc(this.x, this.y, rad * 0.6, 0, Math.PI * 2);
+         ctx.stroke();
+         ctx.beginPath();
+         ctx.arc(this.x, this.y, rad * 4.6, 0, Math.PI * 2);
+         ctx.stroke();
+         ctx.beginPath();
+         ctx.arc(this.x, this.y, rad * 6.6, 0, Math.PI * 2);
          ctx.stroke();
       }
       if (fill) {
          ctx.beginPath();
          ctx.arc(this.x, this.y, rad * 0.4, 0, Math.PI * 2);
          ctx.fillStyle = "yellow";
+         ctx.strokeStyle = "yellow";
          ctx.fill();
+         ctx.beginPath();
+         ctx.arc(this.x, this.y, rad * 4.6, 0, Math.PI * 2);
+         ctx.stroke();
+         ctx.beginPath();
+         ctx.arc(this.x, this.y, rad * 6.6, 0, Math.PI * 2);
+         ctx.stroke();
       }
    }
 }
