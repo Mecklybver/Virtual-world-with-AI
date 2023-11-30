@@ -126,17 +126,17 @@ class GraphEditor {
  
    display() {
      if (this.show) {
-       this.graph.draw(this.ctx);
+       this.graph.draw(this.ctx,{viewport :this.viewport.zoom});
        if (this.hovered) {
-         this.hovered.draw(this.ctx, { fill: true });
+         this.hovered.draw(this.ctx, { fill: true ,viewport :this.viewport.zoom});
        }
        if (this.selected) {
          const intent = this.hovered ? this.hovered : this.mouse;
          new Segment(this.selected, intent).draw(ctx, { dash: [3, 3] });
-         this.selected.draw(this.ctx, { outline: true });
+         this.selected.draw(this.ctx, { outline: true ,viewport :this.viewport.zoom});
        }
        if (this.intent &&!this.hovered) {
-         this.intent.draw(this.ctx);
+         this.intent.draw(this.ctx, {viewport :this.viewport.zoom});
        }
      }
    }

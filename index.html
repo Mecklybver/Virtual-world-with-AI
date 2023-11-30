@@ -13,24 +13,23 @@
          &nbsp;
          <button id="graphBtn" onclick="setMode('graph')">🌐</button>
          <button id="stopBtn" onclick="setMode('stop')">🛑</button>
-         <button id="yieldBtn" onclick="setMode('yield')">⚠️</button>
          <button id="crossingBtn" onclick="setMode('crossing')">🚶</button>
      
-         <button id="startBtn" onclick="setMode('start')">🚙</button>
+         <button id="carBtn" onclick="setMode('car')">🚙</button>
       </div>
 
       <script src="js/world.js"></script>
       <script src="js/viewport.js"></script>
       <script src="js/markings/marking.js"></script>
       <script src="js/markings/stop.js"></script>
-      <script src="js/markings/start.js"></script>
+      <script src="js/markings/car.js"></script>
       <script src="js/markings/crossing.js"></script>
   
       <script src="js/editors/markingEditor.js"></script>
       <script src="js/editors/graphEditor.js"></script>
       <script src="js/editors/crossingEditor.js"></script>
       <script src="js/editors/stopEditor.js"></script>
-      <script src="js/editors/startEditor.js"></script>
+      <script src="js/editors/CarEditor.js"></script>
    
       <script src="js/items/tree.js"></script>
       <script src="js/items/building.js"></script>
@@ -42,7 +41,7 @@
       <script src="js/primitives/envelope.js"></script>
       <script>
          myCanvas.width = innerWidth - 200;
-         myCanvas.height = innerHeight - 100;
+         myCanvas.height = innerHeight - 130;
 
          const ctx = myCanvas.getContext("2d");
 
@@ -59,7 +58,7 @@
             graph: { button: graphBtn, editor: new GraphEditor(viewport, graph) },
             stop: { button: stopBtn, editor: new StopEditor(viewport, world) },
             crossing: { button: crossingBtn, editor: new CrossingEditor(viewport, world) },
-            start: { button: startBtn, editor: new StartEditor(viewport, world) },
+            car: { button: carBtn, editor: new CarEditor(viewport, world) },
     
          };
 
@@ -70,6 +69,8 @@
          animate();
 
          function animate() {
+            myCanvas.width = innerWidth - 200;
+         myCanvas.height = innerHeight - 130;
             viewport.reset();
             if (graph.hash() != oldGraphHash) {
                world.generate();
@@ -77,7 +78,7 @@
             }
             const viewPoint = scale(viewport.getOffset(), -1);
             world.draw(ctx, viewPoint);
-            ctx.globalAlpha = 0.3;
+            ctx.globalAlpha = 0.35;
             for (const tool of Object.values(tools)) {
                tool.editor.display();
             }

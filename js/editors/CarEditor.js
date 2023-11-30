@@ -1,10 +1,10 @@
-class StartEditor extends MarkingEditor {
+class CarEditor extends MarkingEditor {
    constructor(viewport, world) {
       super(viewport, world, world.laneGuides);
    }
 
    createMarking(center, directionVector) {
-      return new Start(
+      return new Car(
          center,
          directionVector,
          world.roadWidth / 2,

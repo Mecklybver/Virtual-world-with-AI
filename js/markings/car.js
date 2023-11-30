@@ -1,6 +1,6 @@
-class Start extends Marking {
-   constructor(center, directionVector, width, height, color = "blue") {
-     super(center, directionVector, width, height, color);
+class Car extends Marking {
+   constructor(center, directionVector, width, height) {
+     super(center, directionVector, width, height);
      this.img = new Image();
      this.img.src = "../car.png";
      this.mask = document.createElement("canvas");
@@ -8,11 +8,11 @@ class Start extends Marking {
      this.mask.height = height;
      this.narrowing = 10;
      const maskCtx = this.mask.getContext("2d");
-     this.color = color;
+     this.color = getRandomColor();
      this.image = new Image();
      this.image.src = "../car.png";
      this.image.onload = () => {
-       maskCtx.fillStyle = color;
+       maskCtx.fillStyle = getRandomColor();
        maskCtx.rect(0, 0, this.width, this.height);
        maskCtx.fill();
  

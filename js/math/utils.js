@@ -101,7 +101,7 @@ function lerp2D(A, B, t) {
 }
 
 function getRandomColor() {
-   const hue = 290 + Math.random() * 260;
+   const hue = Math.random() * 360;
    return "hsl(" + hue + ", 100%, 60%)";
 }
 
