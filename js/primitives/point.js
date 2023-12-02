@@ -8,39 +8,50 @@ class Point {
       return this.x == point.x && this.y == point.y;
    }
 
-   draw(ctx, { size = 18, color = "black", outline = false, fill = false, viewport= 1 } = {}) {
+   draw(ctx, { size = 18, color = "black", outline = false, fill = false, zoom=1, blur = false } = {}) {
       const rad = size / 2;
+     
+    
+  
       ctx.beginPath();
       ctx.fillStyle = color;
+      if(blur){
+         ctx.shadowColor = color;
+         ctx.shadowBlur = 50;
+      }
       ctx.arc(this.x, this.y, rad, 0, Math.PI * 2);
       ctx.fill();
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
       if (outline) {
          ctx.beginPath();
          ctx.lineWidth = 2;
          ctx.strokeStyle = "red";
          ctx.fillStyle = "red";
-         ctx.arc(this.x, this.y, rad * 0.3 * viewport , 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 0.3 * zoom , 0, Math.PI * 2);
          ctx.fill();
-         ctx.arc(this.x, this.y, rad * 0.6 * viewport, 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 0.6 * zoom, 0, Math.PI * 2);
          ctx.stroke();
          ctx.beginPath();
-         ctx.arc(this.x, this.y, rad * 4.6 * viewport, 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 4.6 * zoom, 0, Math.PI * 2);
          ctx.stroke();
          ctx.beginPath();
-         ctx.arc(this.x, this.y, rad * 6.6 * viewport, 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 6.6 * zoom, 0, Math.PI * 2);
          ctx.stroke();
+        
       }
       if (fill) {
          ctx.beginPath();
-         ctx.arc(this.x, this.y, rad * 0.4 *viewport, 0, Math.PI * 2);
+     
+         ctx.arc(this.x, this.y, rad * 0.4 *zoom, 0, Math.PI * 2);
          ctx.fillStyle = "yellow";
          ctx.strokeStyle = "yellow";
          ctx.fill();
          ctx.beginPath();
-         ctx.arc(this.x, this.y, rad * 4.6  *viewport, 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 4.6  *zoom, 0, Math.PI * 2);
          ctx.stroke();
          ctx.beginPath();
-         ctx.arc(this.x, this.y, rad * 6.6  *viewport, 0, Math.PI * 2);
+         ctx.arc(this.x, this.y, rad * 6.6  *zoom, 0, Math.PI * 2);
          ctx.stroke();
       }
    }

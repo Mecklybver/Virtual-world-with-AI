@@ -125,18 +125,19 @@ class GraphEditor {
    }
  
    display() {
+    const {zoom}= viewport
      if (this.show) {
-       this.graph.draw(this.ctx,{viewport :this.viewport.zoom});
+       this.graph.draw(this.ctx,{});
        if (this.hovered) {
-         this.hovered.draw(this.ctx, { fill: true ,viewport :this.viewport.zoom});
+         this.hovered.draw(this.ctx, { fill: true , zoom});
        }
        if (this.selected) {
          const intent = this.hovered ? this.hovered : this.mouse;
          new Segment(this.selected, intent).draw(ctx, { dash: [3, 3] });
-         this.selected.draw(this.ctx, { outline: true ,viewport :this.viewport.zoom});
+         this.selected.draw(this.ctx, { outline: true , zoom});
        }
        if (this.intent &&!this.hovered) {
-         this.intent.draw(this.ctx, {viewport :this.viewport.zoom});
+         this.intent.draw(this.ctx, {zoom});
        }
      }
    }

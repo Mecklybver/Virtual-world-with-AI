@@ -8,11 +8,10 @@ class Car extends Marking {
      this.mask.height = height;
      this.narrowing = 10;
      const maskCtx = this.mask.getContext("2d");
-     this.color = getRandomColor();
      this.image = new Image();
      this.image.src = "../car.png";
      this.image.onload = () => {
-       maskCtx.fillStyle = getRandomColor();
+       maskCtx.fillStyle =  getRandomColor();
        maskCtx.rect(0, 0, this.width, this.height);
        maskCtx.fill();
  
@@ -29,6 +28,10 @@ class Car extends Marking {
        this.poly.segments[3],
      ];
    }
+   update(color){
+    console.log(color)
+   }
+   
  
    draw(ctx) {
       // for (const b of this.border) {

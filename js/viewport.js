@@ -5,6 +5,8 @@ class Viewport {
  
      this.zoom = 2;
      this.maxZoom = 20;
+     this.minZoom = 0.3;
+     this.biggerStep= false;
      this.step = 0.1
      this.center = new Point(canvas.width*0.5,canvas.height*0.5)
      this.offset = scale(this.center, -1);
@@ -42,15 +44,17 @@ class Viewport {
    }
  
    #addEventListeners() {
-     this.canvas.addEventListener(
-       "mousewheel",
-       this.#handleMouseWheel.bind(this)
-     );
-     
+
+  
+
+    document.addEventListener("keydown",  e => e.key === "Shift" && (this.biggerStep = true));
+    document.addEventListener("keyup", e => e.key === "Shift" && (this.biggerStep = false));    
+     this.canvas.addEventListener("mousewheel",this.#handleMouseWheel.bind(this));
      this.canvas.addEventListener("mousedown", this.#handleMouseDown.bind(this));
      this.canvas.addEventListener("mousemove", this.#handleMouseMove.bind(this));
      this.canvas.addEventListener("mouseup", this.#handleMouseUp.bind(this));
      this.canvas.addEventListener("keydown", this.#handleMouseUp.bind(this));
+     
    }
  
    #handleMouseDown(e) {
@@ -82,10 +86,9 @@ class Viewport {
    }
  
    #handleMouseWheel(e) {
-     const dir = Math.sign(e.deltaY);
-     // const step = 0.1;
-     this.zoom += dir * this.step;
-     this.zoom = Math.max(1, Math.min(this.maxZoom, this.zoom));
-     
-   }
+    const dir = Math.sign(e.deltaY);
+    const step = this.biggerStep ? 0.5 : this.step; // Use a different step if Alt key is held
+    this.zoom += dir * step;
+    this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.zoom));
+  }
  }

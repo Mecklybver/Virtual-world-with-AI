@@ -2,15 +2,11 @@ class MarkingEditor {
    constructor(viewport, world, targetSegments) {
       this.viewport = viewport;
       this.world = world;
-
       this.canvas = viewport.canvas;
       this.ctx = this.canvas.getContext("2d");
-
       this.mouse = null;
       this.intent = null;
-
       this.targetSegments = targetSegments;
-
       this.markings = world.markings;
    }
 
