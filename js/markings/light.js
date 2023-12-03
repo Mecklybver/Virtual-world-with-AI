@@ -10,6 +10,7 @@ class Light extends Marking {
     ];
 
     this.state = "off"
+    this.type = "light";
   }
 
   draw(ctx) {

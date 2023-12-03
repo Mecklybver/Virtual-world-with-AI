@@ -15,6 +15,7 @@ class World {
     this.buildingMinLength = buildingMinLength;
     this.spacing = spacing;
     this.treeSize = treeSize;
+
     this.scarcity = 35;
 
     this.envelopes = [];
@@ -27,6 +28,26 @@ class World {
     this.frameCount = 0;
 
     this.generate();
+  }
+
+  static load(info){
+    const world = new World(new Graph());
+    world.graph = Graph.load(info.graph);
+    world.roadWidth = info.roadWidth;
+    world.roadRoundness = info.roadRoundness;
+    world.buildingWidth = info.buildingWidth;
+    world.buildingMinLength = info.buildingMinLength;
+    world.spacing = info.spacing;
+    world.treeSize = info.treeSize;
+    world.envelopes = info.envelopes.map((e) => Envelope.load(e));
+    world.roadBorders = info.roadBorders.map((b) => new Segment(b.p1, b.p2));
+    world.buildings = info.buildings.map((e) => Building.load(e));
+    world.trees = info.trees.map((t) => new Tree(t.center, info.treeSize));
+    world.laneGuides = info.laneGuides.map((g) => new Segment(g.p1, g.p2));
+    world.markings = info.markings.map((m) => Marking.load(m));
+    world.zoom = info.zoom;
+    world.offset = info.offset;
+    return world;
   }
 
   generate() {
@@ -206,43 +227,43 @@ class World {
     const lights = this.markings.filter((m) => m instanceof Light);
     const controlCenters = [];
     for (const light of lights) {
-      const point = getNearestPoint(light.center, this.#getIntersections());
-      let controlCenter = controlCenters.find((c) => c.equals(point));
-      if (!controlCenter) {
-        controlCenter = new Point(point.x, point.y);
-        controlCenter.lights = [light];
-        controlCenters.push(controlCenter);
-      } else {
-        controlCenter.lights.push(light);
-      }
+       const point = getNearestPoint(light.center, this.#getIntersections());
+       let controlCenter = controlCenters.find((c) => c.equals(point));
+       if (!controlCenter) {
+          controlCenter = new Point(point.x, point.y);
+          controlCenter.lights = [light];
+          controlCenters.push(controlCenter);
+       } else {
+          controlCenter.lights.push(light);
+       }
     }
     const greenDuration = 8,
-      orangeDuration = 1;
+       orangeDuration = 1;
+      
     for (const center of controlCenters) {
-      center.ticks = center.lights.length * (greenDuration + orangeDuration);
+       center.ticks = center.lights.length * (greenDuration + orangeDuration);
     }
-    
-      const tick = Math.floor(this.frameCount / 60);
-      for (const center of controlCenters) {
-        const cTick = tick % center.ticks;
-        const greenOrangeDuration = Math.floor(
-          cTick / (greenDuration + orangeDuration)
-        );
-        const greenOrangeState =
+    const tick = Math.floor(this.frameCount / 60);
+    for (const center of controlCenters) {
+       const cTick = tick % center.ticks;
+       const greenOrangeIndex = Math.floor(
+          cTick / (greenDuration + orangeDuration) 
+       );
+       const greenOrangeState =
           cTick % (greenDuration + orangeDuration) < greenDuration
-            ? "green"
-            : "orange";
-        for (let i = 0; i < center.lights.length; i++) {
-          if (i == greenOrangeDuration) {
-            center.lights[i].state = greenOrangeState;
+             ? "green"
+             : "orange";
+       for (let i = 0; i < center.lights.length; i++) {
+          if (i == greenOrangeIndex) {
+             center.lights[i].state = greenOrangeState;
           } else {
-            center.lights[i].state = "red";
+             center.lights[i].state = "red";
           }
-        }
-      }
-      this.frameCount++;
-    
-  }
+       }
+    }
+    this.frameCount++;
+ }
+  
 
   draw(ctx, viewPoint) {
    this.#updateLights();

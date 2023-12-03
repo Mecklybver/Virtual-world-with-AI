@@ -1,6 +1,12 @@
 class CarEditor extends MarkingEditor {
-  constructor(viewport, world) {
-    super(viewport, world, world.laneGuides);
+  constructor(viewport, world, inputColor) {
+    super(viewport, world, world.laneGuides, inputColor);
+
+    inputColor.addEventListener("change", (e) => {
+      this.color = `hsl(${e.target.value},100%,60%)`;
+      this.range = true
+    });
+
   }
 
   createMarking(center, directionVector) {
@@ -8,7 +14,9 @@ class CarEditor extends MarkingEditor {
       center,
       directionVector,
       world.roadWidth / 2,
-      world.roadWidth * 0.7
+      world.roadWidth * 0.7,
+      this.color,
+      this.range
     );
   }
 }
