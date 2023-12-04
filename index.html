@@ -55,7 +55,7 @@
 
       const ctx = myCanvas.getContext("2d");
 
-      const inputColor = document.querySelector("#color")
+      const input = document.querySelector("#color")
 
       const worldString = localStorage.getItem("world");
       const worldInfo = worldString ? JSON.parse(worldString) : null;
@@ -69,9 +69,9 @@
 
       const tools = {
         graph: { button: graphBtn, editor: new GraphEditor(viewport, graph) },
-        stop: { button: stopBtn, editor: new StopEditor(viewport, world) },
+        stop: { button: stopBtn, editor: new StopEditor(viewport, world, input) },
         crossing: {button: crossingBtn,editor: new CrossingEditor(viewport, world)},
-        car: { button: carBtn, editor: new CarEditor(viewport, world, inputColor) },
+        car: { button: carBtn, editor: new CarEditor(viewport, world, input) },
         light: { button: lightBtn, editor: new LightEditor(viewport, world) }
       };
 

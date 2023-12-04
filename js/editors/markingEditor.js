@@ -65,8 +65,9 @@ class MarkingEditor {
          if (this.intent) {
             this.markings.push(this.intent);
             this.intent = null;
-            if(this.range)this.range=false
-            
+            if(this.range){
+               this.range=false
+}            
          }
       }
       if (evt.button == 2) { // right click

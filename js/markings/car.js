@@ -12,15 +12,14 @@ class Car extends Marking {
     
     console.log(this.color, range)
     const maskCtx = this.mask.getContext("2d");
-    this.image = new Image();
-    this.image.src = "../car.png";
-    this.image.onload = () => {
+
+    this.img.onload = () => {
       maskCtx.fillStyle =  this.color
       maskCtx.rect(0, 0, this.width, this.height);
       maskCtx.fill();
 
       maskCtx.globalCompositeOperation = "destination-atop";
-      maskCtx.drawImage(this.image, 0, 0, this.width, this.height);
+      maskCtx.drawImage(this.img, 0, 0, this.width, this.height);
     };
 
    
@@ -31,6 +30,8 @@ class Car extends Marking {
       this.poly.segments[2],
       this.poly.segments[3],
     ];
+
+    this.type="car"
   }
   update(color){
    console.log(color)
