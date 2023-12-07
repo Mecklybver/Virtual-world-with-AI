@@ -25,12 +25,15 @@ class World {
     this.laneGuides = [];
 
     this.markings = [];
+
+    this.cars = [];
+    this.bestCar = null;
     this.frameCount = 0;
 
     this.generate();
   }
 
-  static load(info){
+  static load(info) {
     const world = new World(new Graph());
     world.graph = Graph.load(info.graph);
     world.roadWidth = info.roadWidth;
@@ -206,73 +209,74 @@ class World {
 
     return bases.map((b) => new Building(b));
   }
-  #getIntersections(){
-      const subset =[];
-      for (const point of this.graph.points){
-         let degree = 0;
-         for(const seg of this.graph.segments){
-            if (seg.includes(point)){
-               degree++
-            }
-         }
-
-         if (degree> 2){
-            subset.push(point);
-         }
+  #getIntersections() {
+    const subset = [];
+    for (const point of this.graph.points) {
+      let degree = 0;
+      for (const seg of this.graph.segments) {
+        if (seg.includes(point)) {
+          degree++;
+        }
       }
-      return subset;
+
+      if (degree > 2) {
+        subset.push(point);
+      }
+    }
+    return subset;
   }
 
   #updateLights() {
     const lights = this.markings.filter((m) => m instanceof Light);
     const controlCenters = [];
     for (const light of lights) {
-       const point = getNearestPoint(light.center, this.#getIntersections());
-       let controlCenter = controlCenters.find((c) => c.equals(point));
-       if (!controlCenter) {
-          controlCenter = new Point(point.x, point.y);
-          controlCenter.lights = [light];
-          controlCenters.push(controlCenter);
-       } else {
-          controlCenter.lights.push(light);
-       }
+      const point = getNearestPoint(light.center, this.#getIntersections());
+      let controlCenter = controlCenters.find((c) => c.equals(point));
+      if (!controlCenter) {
+        controlCenter = new Point(point.x, point.y);
+        controlCenter.lights = [light];
+        controlCenters.push(controlCenter);
+      } else {
+        controlCenter.lights.push(light);
+      }
     }
     const greenDuration = 8,
-       orangeDuration = 1;
-      
+      orangeDuration = 1;
+
     for (const center of controlCenters) {
-       center.ticks = center.lights.length * (greenDuration + orangeDuration);
+      center.ticks = center.lights.length * (greenDuration + orangeDuration);
     }
     const tick = Math.floor(this.frameCount / 60);
     for (const center of controlCenters) {
-       const cTick = tick % center.ticks;
-       const greenOrangeIndex = Math.floor(
-          cTick / (greenDuration + orangeDuration) 
-       );
-       const greenOrangeState =
-          cTick % (greenDuration + orangeDuration) < greenDuration
-             ? "green"
-             : "orange";
-       for (let i = 0; i < center.lights.length; i++) {
-          if (i == greenOrangeIndex) {
-             center.lights[i].state = greenOrangeState;
-          } else {
-             center.lights[i].state = "red";
-          }
-       }
+      const cTick = tick % center.ticks;
+      const greenOrangeIndex = Math.floor(
+        cTick / (greenDuration + orangeDuration)
+      );
+      const greenOrangeState =
+        cTick % (greenDuration + orangeDuration) < greenDuration
+          ? "green"
+          : "orange";
+      for (let i = 0; i < center.lights.length; i++) {
+        if (i == greenOrangeIndex) {
+          center.lights[i].state = greenOrangeState;
+        } else {
+          center.lights[i].state = "red";
+        }
+      }
     }
     this.frameCount++;
- }
-  
+  }
 
-  draw(ctx, viewPoint) {
-   this.#updateLights();
+  draw(ctx, viewPoint, showStartMarkings = true, renderRadius = 2000) {
+    this.#updateLights();
 
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
     }
     for (const marking of this.markings) {
-      marking.draw(ctx);
+      if (!marking instanceof Start || showStartMarkings) {
+        marking.draw(ctx);
+      }
     }
     for (const seg of this.graph.segments) {
       seg.draw(ctx, { color: "white", width: 4, dash: [10, 10] });
@@ -281,7 +285,20 @@ class World {
       seg.draw(ctx, { color: "white", width: 4 });
     }
 
-    const items = [...this.buildings, ...this.trees];
+    ctx.globalAlpha = 0.2;
+    for (const car of this.cars) {
+      car.draw(ctx);
+    }
+
+    ctx.globalAlpha = 1;
+    if (this.bestCar) {
+      this.bestCar.draw(ctx, true);
+    }
+
+    const items = [...this.buildings, ...this.trees].filter(
+      (i) => i.base.distanceToPoint(viewPoint) < renderRadius
+    )
+    ;
     items.sort(
       (a, b) =>
         b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
@@ -290,5 +307,4 @@ class World {
       item.draw(ctx, viewPoint);
     }
   }
-  
 }

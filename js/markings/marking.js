@@ -23,7 +23,7 @@ class Marking {
      case "light":
        return new Light(point, dir, info.width, info.height);
      case "car":
-       return new Car(point, dir, info.width, info.height, info.color);
+       return new Start(point, dir, info.width, info.height, info.color);
      case "stop":
        return new Stop(point, dir, info.width, info.height);
      default:

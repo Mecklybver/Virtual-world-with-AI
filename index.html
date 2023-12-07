@@ -6,24 +6,45 @@
   </head>
   <body>
     <h1>World Editor</h1>
-    <canvas id="myCanvas"></canvas>
+    <canvas></canvas>
     <div>
-      <input type="range" min="1" max="360" id="color">
+      <input type="range" min="1" max="360" id="color" />
     </div>
-  
+
     <div id="controls">
       <button onclick="dispose()">🗑️</button>
       <button onclick="save()">💾</button>
-      <label for="fileInput" class="file-input-label">📁
-        <input type="file" id="fileInput" accept=".world"
-        onchange="load(event)">
+      <label for="fileInput" class="file-input-label"
+        >📁
+        <input
+          type="file"
+          id="fileInput"
+          accept=".world"
+          onchange="load(event)"
+        />
       </label>
+      <button onclick="openOsmPanel()">🗺️</button>
+
       &nbsp;
       <button id="graphBtn" onclick="setMode('graph')">🌐</button>
       <button id="stopBtn" onclick="setMode('stop')">🛑</button>
       <button id="crossingBtn" onclick="setMode('crossing')">🚶</button>
       <button id="carBtn" onclick="setMode('car')">🚙</button>
       <button id="lightBtn" onclick="setMode('light')">🚦</button>
+
+      <div id="osmPanel">
+        <textarea
+          name=""
+          id="osmDataContainer"
+          cols="50"
+          rows="10"
+          placeholder="Paste OSM data here"
+        ></textarea>
+        <div>
+          <button onclick="parseOsmData()">✔️</button>
+          <button onclick="closeOsmPanel()">❌</button>
+        </div>
+      </div>
     </div>
 
     <script src="js/world.js"></script>
@@ -49,46 +70,50 @@
     <script src="js/primitives/segment.js"></script>
     <script src="js/primitives/polygon.js"></script>
     <script src="js/primitives/envelope.js"></script>
+    <script src="js/math/osm.js"></script>
     <script>
-      myCanvas.width = innerWidth - 200;
-      myCanvas.height = innerHeight - 140;
+      const canvas = document.querySelector("canvas");
+      canvas.width = innerWidth - 200;
+      canvas.height = innerHeight - 140;
 
-      const ctx = myCanvas.getContext("2d");
+      const ctx = canvas.getContext("2d");
 
-      const input = document.querySelector("#color")
+      const input = document.querySelector("#color");
 
       const worldString = localStorage.getItem("world");
       const worldInfo = worldString ? JSON.parse(worldString) : null;
-      let world = worldInfo
-        ? World.load(worldInfo)
-        : new World(new Graph());
+      let world = worldInfo ? World.load(worldInfo) : new World(new Graph());
       const graph = world.graph;
-    
 
-      const viewport = new Viewport(myCanvas, world.zoom, world.offset);
+      const viewport = new Viewport(canvas, world.zoom, world.offset);
 
       const tools = {
         graph: { button: graphBtn, editor: new GraphEditor(viewport, graph) },
-        stop: { button: stopBtn, editor: new StopEditor(viewport, world, input) },
-        crossing: {button: crossingBtn,editor: new CrossingEditor(viewport, world)},
-        car: { button: carBtn, editor: new CarEditor(viewport, world, input) },
-        light: { button: lightBtn, editor: new LightEditor(viewport, world) }
+        stop: {
+          button: stopBtn,
+          editor: new StopEditor(viewport, world, input),
+        },
+        crossing: {
+          button: crossingBtn,
+          editor: new CrossingEditor(viewport, world),
+        },
+        car: {
+          button: carBtn,
+          editor: new StartEditor(viewport, world, input),
+        },
+        light: { button: lightBtn, editor: new LightEditor(viewport, world) },
       };
 
       let oldGraphHash = graph.hash();
 
       setMode("graph");
 
- 
-    
-
-
       animate();
 
       function animate() {
+        canvas.width = innerWidth - 200;
+        canvas.height = innerHeight - 145;
 
-        myCanvas.width = innerWidth - 200;
-        myCanvas.height = innerHeight - 145;
         viewport.reset();
         if (graph.hash() != oldGraphHash) {
           world.generate();
@@ -111,11 +136,11 @@
       function save() {
         world.zoom = viewport.zoom;
         world.offset = viewport.offset;
-        const element = document.createElement("a")
+        const element = document.createElement("a");
         element.setAttribute(
           "href",
-          "data:application/json;charset=uft-8,"+
-          encodeURIComponent(JSON.stringify(world))
+          "data:application/json;charset=uft-8," +
+            encodeURIComponent(JSON.stringify(world))
         );
 
         const fileName = "name.world";
@@ -125,25 +150,23 @@
       }
 
       function load(event) {
-  const file = event.target.files[0];
+        const file = event.target.files[0];
 
-  if (!file) {
-    alert("No file selected");
-    return;
-  }
+        if (!file) {
+          alert("No file selected");
+          return;
+        }
 
-  const reader = new FileReader();
-  reader.readAsText(file);  // Fix typo here: change readAstext to readAsText
-
-  reader.onload = (e) => {
-    const fileContent = e.target.result;
-    const jsonData = JSON.parse(fileContent);
-    world = World.load(jsonData);
-    localStorage.setItem("world", JSON.stringify(world));
-    location.reload();
-  };
-}
-
+        const reader = new FileReader();
+        reader.readAsText(file); 
+        reader.onload = (e) => {
+          const fileContent = e.target.result;
+          const jsonData = JSON.parse(fileContent);
+          world = World.load(jsonData);
+          localStorage.setItem("world", JSON.stringify(world));
+          location.reload();
+        };
+      }
 
       function setMode(mode) {
         dissableEditors();
@@ -158,6 +181,25 @@
           tool.button.style.filter = "grayscale(100%)";
           tool.editor.disable();
         }
+      }
+
+      function openOsmPanel() {
+        osmPanel.style.display = "block";
+      }
+
+      function closeOsmPanel() {
+        osmPanel.style.display = "none";
+      }
+
+      function parseOsmData(){
+        if (!osmDataContainer){
+          alert("Paste data first");
+          return;
+        }
+        const res = Osm.parseRoads(JSON.parse(osmDataContainer.value));
+        graph.points = res.points;
+        graph.segments = res.segments;
+        closeOsmPanel();
       }
     </script>
   </body>

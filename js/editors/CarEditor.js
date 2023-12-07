@@ -1,4 +1,4 @@
-class CarEditor extends MarkingEditor {
+class StartEditor extends MarkingEditor {
   constructor(viewport, world, inputColor) {
     super(viewport, world, world.laneGuides, inputColor);
 
@@ -10,7 +10,7 @@ class CarEditor extends MarkingEditor {
   }
 
   createMarking(center, directionVector) {
-    return new Car(
+    return new Start(
       center,
       directionVector,
       world.roadWidth / 2,

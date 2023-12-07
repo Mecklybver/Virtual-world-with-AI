@@ -17,6 +17,8 @@ class Point {
       fill = false,
       zoom = 1,
       blur = false,
+      dash = [],
+      time = null
     } = {}
   ) {
     const rad = size / 2;
@@ -38,6 +40,9 @@ class Point {
       ctx.fillStyle = "red";
       ctx.arc(this.x, this.y, rad * 0.3 * zoom, 0, Math.PI * 2);
       ctx.fill();
+      ctx.beginPath();
+      ctx.setLineDash(dash);
+      if(time)ctx.lineDashOffset=time;
       ctx.arc(this.x, this.y, rad * 0.6 * zoom, 0, Math.PI * 2);
       ctx.stroke();
       ctx.beginPath();
@@ -46,6 +51,7 @@ class Point {
       ctx.beginPath();
       ctx.arc(this.x, this.y, rad * 6.6 * zoom, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.setLineDash([]);
     }
     if (fill) {
       ctx.beginPath();
@@ -55,11 +61,16 @@ class Point {
       ctx.strokeStyle = "yellow";
       ctx.fill();
       ctx.beginPath();
+      ctx.setLineDash(dash);
+      if(time)ctx.lineDashOffset=time/50 ;
       ctx.arc(this.x, this.y, rad * 4.6 * zoom, 0, Math.PI * 2);
       ctx.stroke();
       ctx.beginPath();
+      if(time)ctx.lineDashOffset=-time /50;
+
       ctx.arc(this.x, this.y, rad * 6.6 * zoom, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.setLineDash([]);
     }
   }
 }

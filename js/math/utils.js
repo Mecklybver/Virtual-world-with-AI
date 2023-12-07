@@ -100,12 +100,18 @@ function lerp2D(A, B, t) {
   return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
 }
 
+function invLerp(a, b, v) {
+  return (v - a) / (b - a);
+}
+
+function degToRad(deg) {
+  return deg * Math.PI / 180
+}
+
 function getRandomColor() {
   const hue = Math.random() * 360;
   return "hsl(" + hue + ", 100%, 60%)";
 }
-
-
 
 function getFake3dPoint(point, viewPoint, height) {
   const dir = normalize(subtract(point, viewPoint));

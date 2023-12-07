@@ -10,7 +10,6 @@ class Stop extends Marking {
    }
 
    draw(ctx) {
-      console.log(this.range)
       ctx.save();
       ctx.translate(this.border.p1.x, this.border.p1.y);
       ctx.rotate(this.degree);

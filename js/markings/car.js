@@ -1,4 +1,4 @@
-class Car extends Marking {
+class Start extends Marking {
   constructor(center, directionVector, width, height,color,range) {
     super(center, directionVector, width, height, color,range);
     this.img = new Image();
@@ -10,7 +10,6 @@ class Car extends Marking {
     
     this.color = range ? color : getRandomColor()
     
-    console.log(this.color, range)
     const maskCtx = this.mask.getContext("2d");
 
     this.img.onload = () => {

@@ -9,7 +9,7 @@ h1 {
    font-family: Arial;
 }
 
-#myCanvas {
+canvas {
    background-color: #2a5;
 }
 
@@ -26,4 +26,14 @@ button , .file-input-label{
 
 input[type="file"]{
    display: none;
+}
+
+#osmPanel{
+   display:none;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: rgba(0,0,0,0.7);
+   padding: 5000px;
 }

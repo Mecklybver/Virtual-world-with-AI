@@ -87,7 +87,7 @@ class Viewport {
  
    #handleMouseWheel(e) {
     const dir = Math.sign(e.deltaY);
-    const step = this.biggerStep ? 0.5 : this.step; // Use a different step if Alt key is held
+    const step = this.biggerStep ? 0.5 : this.step; 
     this.zoom += dir * step;
     this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.zoom));
   }
