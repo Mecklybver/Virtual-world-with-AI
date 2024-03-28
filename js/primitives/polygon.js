@@ -118,6 +118,7 @@ class Polygon {
       fill = "rgba(0,0,255,0.3)",
       join = "miter",
       blur = false,
+      shadowBlur = 100,
       blurColor = "transparent",
     } = {}
   ) {
@@ -128,7 +129,7 @@ class Polygon {
     ctx.lineJoin = join;
     if (blur) {
       ctx.shadowColor = blurColor;
-      ctx.shadowBlur = 100;
+      ctx.shadowBlur = shadowBlur;
     }
     ctx.moveTo(this.points[0].x, this.points[0].y);
     for (let i = 1; i < this.points.length; i++) {

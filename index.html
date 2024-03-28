@@ -31,6 +31,7 @@
       <button id="crossingBtn" onclick="setMode('crossing')">🚶</button>
       <button id="carBtn" onclick="setMode('car')">🚙</button>
       <button id="lightBtn" onclick="setMode('light')">🚦</button>
+      <button id="targetBtn" onclick="setMode('target')">🎯</button>
 
       <div id="osmPanel">
         <textarea
@@ -54,6 +55,7 @@
     <script src="js/markings/car.js"></script>
     <script src="js/markings/crossing.js"></script>
     <script src="js/markings/light.js"></script>
+    <script src="js/markings/target.js"></script>
 
     <script src="js/editors/markingEditor.js"></script>
     <script src="js/editors/graphEditor.js"></script>
@@ -61,6 +63,7 @@
     <script src="js/editors/stopEditor.js"></script>
     <script src="js/editors/CarEditor.js"></script>
     <script src="js/editors/lightEditor.js"></script>
+    <script src="js/editors/targetEditor.js"></script>
 
     <script src="js/items/tree.js"></script>
     <script src="js/items/building.js"></script>
@@ -102,6 +105,7 @@
           editor: new StartEditor(viewport, world, input),
         },
         light: { button: lightBtn, editor: new LightEditor(viewport, world) },
+        target: { button: targetBtn, editor: new TargetEditor(viewport, world) }
       };
 
       let oldGraphHash = graph.hash();

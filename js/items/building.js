@@ -2,6 +2,8 @@ class Building {
    constructor(poly, height = 150) {
      this.base = poly;
      this.height = height;
+     this.doors = [];
+     this.windows = [];
    }
 
    static load(info){
@@ -62,7 +64,7 @@ class Building {
  
      this.base.draw(ctx, { fill: "white", stroke: "rgba(0,0,0,0.2)", lineWidth: 50 });
      for (const side of sides) {
-       side.draw(ctx, { fill: "white", stroke: "#AAA" });
+       side.draw(ctx, { fill: "white", stroke: "#AAA"});
      }
      ceiling.draw(ctx, { fill: "white", stroke: "white", lineWidth: 4 });
      for (const poly of roofPolys) {

@@ -37,13 +37,25 @@ class GraphEditor {
      this.canvas.addEventListener("mousemove", this.boundMouseMove);
      this.canvas.addEventListener("mouseup", this.boundMouseUp);
      this.canvas.addEventListener("contextmenu", this.boundContextMenu);
+
+     window.addEventListener("keydown", (e) => {
+      if (e.key == "s") {
+         this.start = this.mouse;
+      }
+      if (e.key == "e") {
+         this.end = this.mouse;
+      }
+      if (this.start && this.end) {
+         world.generateCorridor(this.start, this.end);
+      }
+   });
    }
  
    #removeEventListeners() {
      this.canvas.removeEventListener("mousedown", this.boundMouseDown);
      this.canvas.removeEventListener("mousemove", this.boundMouseMove);
      this.canvas.removeEventListener("mouseup", this.boundMouseUp);
-     // this.canvas.removeEventListener("contextmenu", this.boundContextMenu);
+     this.canvas.removeEventListener("contextmenu", this.boundContextMenu);
    }
  
    #handleMouseMove(evt) {
