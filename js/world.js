@@ -30,6 +30,7 @@ class World {
     this.bestCar = null;
     this.frameCount = 0;
 
+
     this.generate();
   }
 
@@ -107,8 +108,8 @@ class World {
 
     const segments = Polygon.union(tmpEnvelopes.map((e) => e.poly));
 
-    this.corridor = segments;
-   
+     this.corridor = segments;
+     return this.corridor
  }
 
 
