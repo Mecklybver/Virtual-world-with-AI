@@ -35,5 +35,10 @@ input[type="file"]{
    left: 50%;
    transform: translate(-50%, -50%);
    background-color: rgba(0,0,0,0.7);
-   padding: 5000px;
+   padding: 20px; /* Adjust padding as needed */
 }
+
+
+
+ 
+ 

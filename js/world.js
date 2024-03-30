@@ -29,6 +29,7 @@ class World {
     this.cars = [];
     this.bestCar = null;
     this.frameCount = 0;
+    this.progress = [];
 
 
     this.generate();

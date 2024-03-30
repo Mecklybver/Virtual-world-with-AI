@@ -24,6 +24,17 @@ function getNearestSegment(loc, segments, threshold = Number.MAX_SAFE_INTEGER) {
   return nearest;
 }
 
+function getSegmentProgress(segment, corridor) {
+  let progress = 0;
+  for (const s of corridor) {
+      if (s.equals(segment)) {
+          return progress;
+      }
+      progress += s.length();
+  }
+  return progress;
+}
+
 function distance(p1, p2) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }

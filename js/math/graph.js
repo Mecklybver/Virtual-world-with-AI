@@ -9,7 +9,8 @@ class Graph {
       const segments = info.segments.map((i) => new Segment(
          points.find((p) => p.equals(i.p1)),
          points.find((p) => p.equals(i.p2)),
-         i.oneWay
+         i.oneWay,
+         i.name
       ));
       return new Graph(points, segments);
    }
